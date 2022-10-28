@@ -1,9 +1,7 @@
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -35,45 +33,49 @@ public class Main {
     }
 
     private static void viewTaskADay(Scanner scanner) throws Exception {
-        System.out.println("Введите дату в формате ДД-MM-ГГГГ");
-        String dateTime = scanner.next();
-        checkDate(dateTime);
-        for (var entry: Task.getSetOfTasks().entrySet()){
-            System.out.println(entry);
+        LocalDate taskForDate;
+        label:
+        while (true) {
+            System.out.println("Для удаления задачи введите дату в формате ДД MM ГГГГ");
+            String choiceDate = scanner.next();
+            taskForDate = checkDateTime(choiceDate);
+            Task.getDateTask(taskForDate);
+            break label;
         }
-
-        }
-            
-
+    }
 
 
     private static void deleteTask(Scanner scanner) throws Exception {
-        String choiceDate;
+        LocalDate taskForDate;
         label:
         while (true) {
-            System.out.println("Для удаления задачи введите дату в формате ДД-MM-ГГГГ");
-            choiceDate = scanner.next();
-            checkDate(choiceDate); //добавить метод сравнения строк и парсинг
+            System.out.println("Для удаления задачи введите дату в формате ДД MM ГГГГ");
+            String choiceDate = scanner.next();
+            taskForDate = checkDateTime(choiceDate);
+            Task.getDateTask(taskForDate);
+            break label;
         }
     }
+    
 
     private static void checkDate(String dateTime) throws Exception {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("ru"));
         DateValidator validator = new DateValidatorUsingDateTimeFormatter(dateFormatter);
 
-        if (!validator.isValid(dateTime)){
-            throw new Exception ("неверно указана дата.");
+        if (!validator.isValid(dateTime)) {
+            throw new Exception("неверно указана дата.");
         }
     }
 
     private static void inputTask(Scanner scanner) throws Exception {
         System.out.print("Введите название задачи: ");
-        String  fake = scanner.nextLine();
-        String  taskName = scanner.nextLine();
+        String fake = scanner.nextLine();
+        String taskName = scanner.nextLine();
         System.out.print("Введите описание задачи: ");
         String descriptionOfTask = scanner.nextLine();
-        System.out.println("Введите дату в формате ДД-MM-ГГГГ");
-        String dateTime = scanner.next();
+        System.out.println("Введите дату в формате ДД MM ГГГГ");
+        String dateTime1 = scanner.next();
+        LocalDate dateTime = checkDateTime(dateTime1);
         PeriodTask periodTask = null;
         label:
         while (true) {
@@ -126,11 +128,49 @@ public class Main {
                 }
             }
         }
-
         Task task = new Task(personalOrWork, taskName, descriptionOfTask, dateTime, periodTask);
-        Task.adSetOfTasks(task,periodTask);
-//        Task.setAnnual(task);
+            switch(periodTask) {
+        case ONETIME -> {
+            Task.adSetOfTasks(task);
+        }
+        case DAILY -> {
+            Task.adSetOfTasks(task);
+            for (int i = 0; i < (365*3); i++) {
+                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                        dateTime.plusDays(1), periodTask);
+                Task.adSetOfTasks(task1);
+            }
+        }
+        case WEEKLY -> {
+            Task.adSetOfTasks(task);
+            for (int i = 0; i < ((365*3)/7); i++) {
+                dateTime= dateTime.plusWeeks(1);
+                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                        dateTime.plusWeeks(1), periodTask);
+                Task.adSetOfTasks(task1);
+            }
+        }
+        case MONTHLY -> {
+            Task.adSetOfTasks(task);
+            for (int i = 0; i < ((365*3)/30); i++) {
+                 dateTime= dateTime.plusMonths(1);
+                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                        dateTime, periodTask);
+                Task.adSetOfTasks(task1);
+            }
+        }
+        case ANNUAL -> {
+            Task.adSetOfTasks(task);
+            for (int i = 0; i < 3; i++) {
+                dateTime= dateTime.plusYears(1);
+                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                        dateTime.plusYears(1), periodTask);
+                Task.adSetOfTasks(task1);
+            }
+        }
     }
+
+}
 
     private static void printMenuPeriod() {
         System.out.println(
@@ -156,5 +196,13 @@ public class Main {
                         """
         );
     }
+    public static LocalDate checkDateTime(String dateTime) throws Exception {
+        checkDate(dateTime);
 
+        LocalDate dateTime1 = LocalDate.parse(dateTime, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        dateTime1.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("ru")));
+
+        dateTime =  dateTime1.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("ru")));
+        return dateTime1;
+    }
 }
