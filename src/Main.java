@@ -36,27 +36,28 @@ public class Main {
         LocalDate taskForDate;
         label:
         while (true) {
-            System.out.println("Для удаления задачи введите дату в формате ДД MM ГГГГ");
+            System.out.println("Для просмотра задач на день введите дату в формате ДД-MM-ГГГГ");
             String choiceDate = scanner.next();
             taskForDate = checkDateTime(choiceDate);
             Task.getDateTask(taskForDate);
             break label;
         }
     }
-
 
     private static void deleteTask(Scanner scanner) throws Exception {
         LocalDate taskForDate;
         label:
         while (true) {
-            System.out.println("Для удаления задачи введите дату в формате ДД MM ГГГГ");
+            System.out.println("Для удаления задачи введите дату в формате ДД-MM-ГГГГ");
             String choiceDate = scanner.next();
             taskForDate = checkDateTime(choiceDate);
             Task.getDateTask(taskForDate);
+            System.out.println("Введите id задачи для ее удаления.");
+            int choiceId = scanner.nextInt();
+            Task.deleteTask(choiceId);
             break label;
         }
     }
-    
 
     private static void checkDate(String dateTime) throws Exception {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("ru"));
@@ -105,7 +106,6 @@ public class Main {
                 scanner.next();
                 System.out.println("Выберите пункт меню из списка!");
             }
-
         }
         boolean personalOrWork;
         label1:
@@ -129,48 +129,47 @@ public class Main {
             }
         }
         Task task = new Task(personalOrWork, taskName, descriptionOfTask, dateTime, periodTask);
-            switch(periodTask) {
-        case ONETIME -> {
-            Task.adSetOfTasks(task);
-        }
-        case DAILY -> {
-            Task.adSetOfTasks(task);
-            for (int i = 0; i < (365*3); i++) {
-                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
-                        dateTime.plusDays(1), periodTask);
-                Task.adSetOfTasks(task1);
+        switch (Objects.requireNonNull(periodTask)) {
+            case ONETIME -> {
+                Task.adSetOfTasks(task);
             }
-        }
-        case WEEKLY -> {
-            Task.adSetOfTasks(task);
-            for (int i = 0; i < ((365*3)/7); i++) {
-                dateTime= dateTime.plusWeeks(1);
-                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
-                        dateTime.plusWeeks(1), periodTask);
-                Task.adSetOfTasks(task1);
+            case DAILY -> {
+                Task.adSetOfTasks(task);
+                for (int i = 0; i < (365 * 3); i++) {
+                    Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                            dateTime.plusDays(1), periodTask);
+                    Task.adSetOfTasks(task1);
+                }
             }
-        }
-        case MONTHLY -> {
-            Task.adSetOfTasks(task);
-            for (int i = 0; i < ((365*3)/30); i++) {
-                 dateTime= dateTime.plusMonths(1);
-                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
-                        dateTime, periodTask);
-                Task.adSetOfTasks(task1);
+            case WEEKLY -> {
+                Task.adSetOfTasks(task);
+                for (int i = 0; i < ((365 * 3) / 7); i++) {
+                    dateTime = dateTime.plusWeeks(1);
+                    Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                            dateTime.plusWeeks(1), periodTask);
+                    Task.adSetOfTasks(task1);
+                }
             }
-        }
-        case ANNUAL -> {
-            Task.adSetOfTasks(task);
-            for (int i = 0; i < 3; i++) {
-                dateTime= dateTime.plusYears(1);
-                Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
-                        dateTime.plusYears(1), periodTask);
-                Task.adSetOfTasks(task1);
+            case MONTHLY -> {
+                Task.adSetOfTasks(task);
+                for (int i = 0; i < ((365 * 3) / 30); i++) {
+                    dateTime = dateTime.plusMonths(1);
+                    Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                            dateTime, periodTask);
+                    Task.adSetOfTasks(task1);
+                }
+            }
+            case ANNUAL -> {
+                Task.adSetOfTasks(task);
+                for (int i = 0; i < 3; i++) {
+                    dateTime = dateTime.plusYears(1);
+                    Task task1 = new Task(personalOrWork, taskName, descriptionOfTask,
+                            dateTime.plusYears(1), periodTask);
+                    Task.adSetOfTasks(task1);
+                }
             }
         }
     }
-
-}
 
     private static void printMenuPeriod() {
         System.out.println(
@@ -192,17 +191,15 @@ public class Main {
                         2. Удалить задачу
                         3. Получить задачу на указанный день
                         0. Выход
-                        Выберите пункт меню: 
+                        Выберите пункт меню:
                         """
         );
     }
+
     public static LocalDate checkDateTime(String dateTime) throws Exception {
         checkDate(dateTime);
-
         LocalDate dateTime1 = LocalDate.parse(dateTime, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         dateTime1.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("ru")));
-
-        dateTime =  dateTime1.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("ru")));
         return dateTime1;
     }
 }

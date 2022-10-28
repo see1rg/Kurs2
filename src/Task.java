@@ -1,13 +1,11 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-public class Task{
+public class Task {
     private boolean personalOrWork;
     private String taskName;
     private String descriptionOfTask;
@@ -15,8 +13,8 @@ public class Task{
     private LocalDate dateTime;
     private PeriodTask periodTask;
     public static int count;
-    private Integer id;
-    private static Map<Integer,Task> setOfTasks = new HashMap<>();
+    private final Integer id;
+    private final static Map<Integer, Task> setOfTasks = new HashMap<>();
 
 
     public Task(boolean personalOrWork, String taskName,
@@ -31,14 +29,29 @@ public class Task{
         id = count++;
     }
 
-    public static void getDateTask(LocalDate localDate){
-        var o = setOfTasks.values();
+    public static void getDateTask(LocalDate localDate) {
+        Collection<Task> o = setOfTasks.values();
         for (Task task : o) {
-           if (task.dateTime.equals(localDate)){
-               System.out.println("Задачи на дату: " + localDate + " " + task);
-           }
+            if (task.dateTime.equals(localDate)) {
+                System.out.println("Задачи на дату: " + localDate + " " + task);
+            } else {
+                System.out.println("Задачи на дату: " + localDate + " отсутствуют.");
+            }
         }
     }
+
+    public static void deleteTask(int choiceId) {
+        Collection<Task> o = setOfTasks.values();
+        for (Task task : o) {
+            if (task.id == choiceId) {
+                setOfTasks.remove(task.id);
+                System.out.println("Задача с id " + choiceId + " успешно удалена.");
+            } else {
+                System.out.println("Задача с id " + choiceId + " не найдена.");
+            }
+        }
+    }
+
     public boolean isPersonalOrWork() {
         return personalOrWork;
     }
@@ -51,13 +64,8 @@ public class Task{
         return taskName;
     }
 
-    public String getCurrentTime() {
-        return currentTime;
-    }
-
     public void setCurrentTime() {
-        String dateTime = ofPattern("dd MMM yyyy, k:mm").format(LocalDateTime.now());
-        this.currentTime = dateTime;
+        this.currentTime = ofPattern("dd MMM yyyy, k:mm").format(LocalDateTime.now());
     }
 
     public void setTaskName(String taskName) {
@@ -76,9 +84,8 @@ public class Task{
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) throws Exception {
-
-        this.dateTime =  dateTime;
+    public void setDateTime(LocalDate dateTime) {
+        this.dateTime = dateTime;
     }
 
     private LocalDate checkDate(LocalDate dateTime) throws Exception {
@@ -92,7 +99,11 @@ public class Task{
     }
 
     public void setPeriodTask(PeriodTask periodTask) {
-        this.periodTask = periodTask;
+        if (periodTask != null) {
+            this.periodTask = periodTask;
+        } else {
+            this.periodTask = PeriodTask.ONETIME;
+        }
     }
 
     public static Map<Integer, Task> getSetOfTasks() {
@@ -109,13 +120,13 @@ public class Task{
 
     @Override
     public String toString() {
-        return "Task{" +
-                "personalOrWork = " + personalOrWork +
-                ", taskName = '" + taskName + '\'' +
-                ", descriptionOfTask = '" + descriptionOfTask + '\'' +
-                ", currentTime = " + currentTime +
-                ", dateTime = '" + dateTime + '\'' +
-                ", periodTask = " + periodTask +
+        return "{Задача id ->" + id + "{" +
+                "личная -> " + personalOrWork +
+                ", название -> '" + taskName + '\'' +
+                ", описание -> '" + descriptionOfTask + '\'' +
+                ", время создания задания -> " + currentTime +
+                ", задание на дату '" + dateTime + '\'' +
+                ", периодичность -> " + periodTask +
                 '}';
     }
 }
