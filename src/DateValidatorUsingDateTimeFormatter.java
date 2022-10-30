@@ -1,14 +1,14 @@
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class DateValidatorUsingDateTimeFormatter implements DateValidator {
-    private DateTimeFormatter dateFormatter;
+public class DateValidatorUsingDateTimeFormatter {
+    private final DateTimeFormatter dateFormatter;
+
 
     public DateValidatorUsingDateTimeFormatter(DateTimeFormatter dateFormatter) {
         this.dateFormatter = dateFormatter;
     }
 
-    @Override
     public boolean isValid(String dateStr) {
         try {
             this.dateFormatter.parse(dateStr);
