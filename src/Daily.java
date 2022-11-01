@@ -5,5 +5,6 @@ public class Daily implements Repeatability {
     public LocalDate nextTime(LocalDate localDate) {
         return localDate.plusDays(1);
     }
+
 }
 

@@ -1,11 +1,9 @@
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ServiceTask {
+
     protected final static Map<Integer, Task> setOfTasks = new HashMap<>();
 
     public static Collection<Task> getTasksOnDate(LocalDate taskForDate) {
@@ -18,11 +16,23 @@ public class ServiceTask {
                 if (taskForDate.isEqual(cycleDate)) {
                     tasksOnDate.add(task);
                 }
-                task.getRepeatability().nextTime(cycleDate);
+                if (PeriodTask.DAILY.equals(task.getRepeatability())) {
+                    cycleDate = new Daily().nextTime(cycleDate);
+                } else if (PeriodTask.WEEKLY.equals(task.getRepeatability())) {
+                    cycleDate = new Weekly().nextTime(cycleDate);
+                } else if (PeriodTask.MONTHLY.equals(task.getRepeatability())) {
+                    cycleDate = new Monthly().nextTime(cycleDate);
+                } else if (PeriodTask.ANNUAL.equals(task.getRepeatability())) {
+                    cycleDate = new Annual().nextTime(cycleDate);
+                } else if (PeriodTask.ONETIME.equals(task.getRepeatability())) {
+                    cycleDate = new OneTime().nextTime(cycleDate);
+                }
             }
         }
         return tasksOnDate;
     }
+
+
 
     public static void deleteTask(int choiceId) {
         Collection<Task> o = setOfTasks.values();

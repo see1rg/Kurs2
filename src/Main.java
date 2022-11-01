@@ -37,7 +37,7 @@ public class Main {
         System.out.println("Для просмотра задач на день введите дату в формате ДД-MM-ГГГГ");
         String choiceDate = scanner.next();
         taskForDate = checkDateTime(choiceDate);
-        ServiceTask.getTasksOnDate(taskForDate);
+        System.out.println(ServiceTask.getTasksOnDate(taskForDate));
     }
 
     private static void deleteTask(Scanner scanner) throws Exception {
