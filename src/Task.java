@@ -1,29 +1,35 @@
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-public class Task implements Repeatability {
+public class Task  {
     private PersonalOrWork personalOrWork;
     private String taskName;
     private String descriptionOfTask;
     private LocalDate timeCreateTask;
-    private PeriodTask periodTask;
     private static int count;
     private final Integer id;
-//    public final static Map<Integer, Task> setOfTasks = new HashMap<>();
+    private Repeatability repeatability;
 
     public Task(PersonalOrWork personalOrWork, String taskName,
                 String descriptionOfTask, LocalDate timeCreateTask,
-                PeriodTask periodTask) throws Exception {
+                Repeatability repeatability) throws Exception {
+        setRepeatability(repeatability);
         setPersonalOrWork(personalOrWork);
         setTaskName(taskName);
         setDescriptionOfTask(descriptionOfTask);
         setTimeCreateTask(timeCreateTask);
-        setPeriodTask(periodTask);
         id = count++;
+    }
+
+    public Repeatability getRepeatability() {
+        return repeatability;
+    }
+
+    public void setRepeatability(Repeatability repeatability) {
+        this.repeatability = repeatability;
     }
 
     public PersonalOrWork isPersonalOrWork() {
@@ -68,22 +74,6 @@ public class Task implements Repeatability {
         return dateTime;
     }
 
-    public PeriodTask getPeriodTask() {
-        return periodTask;
-    }
-
-    public void setPeriodTask(PeriodTask periodTask) {
-        if (periodTask != null) {
-            this.periodTask = periodTask;
-        } else {
-            this.periodTask = PeriodTask.ONETIME;
-        }
-    }
-
-//    public static Map<Integer, Task> getSetOfTasks() {
-//        return setOfTasks;
-//    }
-
     public static void adSetOfTasks(Task task) {
         ServiceTask.setOfTasks.put(task.getId(), task);
     }
@@ -99,7 +89,8 @@ public class Task implements Repeatability {
                 ", название -> '" + taskName + '\'' +
                 ", описание -> '" + descriptionOfTask + '\'' +
                 ", задание на дату '" + timeCreateTask + '\'' +
-                ", периодичность -> " + periodTask +
+                ", периодичность -> " + repeatability +
                 '}';
     }
+
 }

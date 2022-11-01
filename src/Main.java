@@ -37,17 +37,15 @@ public class Main {
         System.out.println("Для просмотра задач на день введите дату в формате ДД-MM-ГГГГ");
         String choiceDate = scanner.next();
         taskForDate = checkDateTime(choiceDate);
-        ServiceTask.getDateTask(taskForDate);
+        ServiceTask.getTasksOnDate(taskForDate);
     }
-
-
 
     private static void deleteTask(Scanner scanner) throws Exception {
         LocalDate taskForDate;
         System.out.println("Для удаления задачи введите дату в формате ДД-MM-ГГГГ");
         String choiceDate = scanner.next();
         taskForDate = checkDateTime(choiceDate);
-        ServiceTask.getDateTask(taskForDate);
+        ServiceTask.getTasksOnDate(taskForDate);
         System.out.println("Введите id задачи для ее удаления.");
         int choiceId = scanner.nextInt();
         ServiceTask.deleteTask(choiceId);
@@ -71,7 +69,7 @@ public class Main {
         System.out.println("Введите дату в формате ДД-MM-ГГГГ");
         String dateTime1 = scanner.next();
         LocalDate timeCreateTask = checkDateTime(dateTime1);
-        PeriodTask periodTask = null;
+        Repeatability repeatability = null;
         label:
         while (true) {
             printMenuPeriod();
@@ -79,19 +77,19 @@ public class Main {
                 int menu = scanner.nextInt();
                 switch (menu) {
                     case 1:
-                        periodTask = PeriodTask.ONETIME;
+                        repeatability = PeriodTask.ONETIME;
                         break label;
                     case 2:
-                        periodTask = PeriodTask.DAILY;
+                        repeatability = PeriodTask.DAILY;
                         break label;
                     case 3:
-                        periodTask = PeriodTask.WEEKLY;
+                        repeatability = PeriodTask.WEEKLY;
                         break label;
                     case 4:
-                        periodTask = PeriodTask.MONTHLY;
+                        repeatability = PeriodTask.MONTHLY;
                         break label;
                     case 5:
-                        periodTask = PeriodTask.ANNUAL;
+                        repeatability = PeriodTask.ANNUAL;
                         break label;
                     case 0:
                         break label;
@@ -122,7 +120,7 @@ public class Main {
                 }
             }
         }
-        Task task = new Task(personalOrWork, taskName, descriptionOfTask, timeCreateTask, periodTask);
+        Task task = new Task(personalOrWork, taskName, descriptionOfTask, timeCreateTask, repeatability);
         Task.adSetOfTasks(task);
     }
 

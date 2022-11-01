@@ -1,11 +1,12 @@
-public enum PeriodTask {
+import java.time.LocalDate;
+
+public enum PeriodTask implements Repeatability {
     ONETIME("однократная"),
     DAILY("ежедневная"),
     WEEKLY("еженедельная"),
     MONTHLY("ежемесячная"),
     ANNUAL("ежегодная");
 
-//    void setOnetime();
     private final String periodTask;
 
     PeriodTask(String periodTask) {
@@ -14,5 +15,10 @@ public enum PeriodTask {
 
     public String getPeriodTask() {
         return periodTask;
+    }
+
+    @Override
+    public LocalDate nextTime(LocalDate localDate) {
+        return null;
     }
 }
