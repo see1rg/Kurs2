@@ -4,7 +4,7 @@ import java.util.*;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-public class Task  {
+public class Task {
     private PersonalOrWork personalOrWork;
     private String taskName;
     private String descriptionOfTask;

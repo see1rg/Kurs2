@@ -33,7 +33,6 @@ public class ServiceTask {
     }
 
 
-
     public static void deleteTask(int choiceId) {
         Collection<Task> o = setOfTasks.values();
         for (Task task : o) {
