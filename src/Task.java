@@ -74,17 +74,13 @@ public class Task {
         return dateTime;
     }
 
-    public static void adSetOfTasks(Task task) {
-        ServiceTask.setOfTasks.put(task.getId(), task);
-    }
-
     public Integer getId() {
         return id;
     }
 
     @Override
     public String toString() {
-        return "{Задача id ->" + id + "{" +
+        return "{Задача id ->" + id + " {" +
                 "личная -> " + personalOrWork +
                 ", название -> '" + taskName + '\'' +
                 ", описание -> '" + descriptionOfTask + '\'' +

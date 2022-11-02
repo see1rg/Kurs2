@@ -4,10 +4,12 @@ import java.util.*;
 
 public class ServiceTask {
 
-    protected final static Map<Integer, Task> setOfTasks = new HashMap<>();
+    private final static Map<Integer, Task> SET_OF_TASKS = new HashMap<>();
+    public static void adSetOfTasks(Task task) {
+        ServiceTask.SET_OF_TASKS.put(task.getId(), task);}
 
     public static Collection<Task> getTasksOnDate(LocalDate taskForDate) {
-        Collection<Task> copy = setOfTasks.values();
+        Collection<Task> copy = SET_OF_TASKS.values();
         Collection<Task> tasksOnDate = new ArrayList<>();
         for (Task task : copy) {
             LocalDate cycleDate = task.getTimeCreateTask();
@@ -16,32 +18,18 @@ public class ServiceTask {
                 if (taskForDate.isEqual(cycleDate)) {
                     tasksOnDate.add(task);
                 }
-                if (PeriodTask.DAILY.equals(task.getRepeatability())) {
-                    cycleDate = new Daily().nextTime(cycleDate);
-                } else if (PeriodTask.WEEKLY.equals(task.getRepeatability())) {
-                    cycleDate = new Weekly().nextTime(cycleDate);
-                } else if (PeriodTask.MONTHLY.equals(task.getRepeatability())) {
-                    cycleDate = new Monthly().nextTime(cycleDate);
-                } else if (PeriodTask.ANNUAL.equals(task.getRepeatability())) {
-                    cycleDate = new Annual().nextTime(cycleDate);
-                } else if (PeriodTask.ONETIME.equals(task.getRepeatability())) {
-                    cycleDate = new OneTime().nextTime(cycleDate);
-                }
+                cycleDate = task.getRepeatability().nextTime(cycleDate);
             }
         }
         return tasksOnDate;
     }
 
-
-    public static void deleteTask(int choiceId) {
-        Collection<Task> o = setOfTasks.values();
-        for (Task task : o) {
-            if (task.getId() == choiceId) {
-                setOfTasks.remove(task.getId());
-                System.out.println("Задача с id " + choiceId + " успешно удалена.");
-            } else {
-                System.out.println("Задача с id " + choiceId + " не найдена.");
-            }
-        }
+    public static void deleteTask(int choiceId) throws IllegalAccessException {
+       if (!SET_OF_TASKS.containsKey(choiceId)){
+             throw new IllegalAccessException("Задача с id " +
+                     choiceId + " не найдена.");
+       } else {SET_OF_TASKS.remove(choiceId);
+           System.out.println("Задача с id " + choiceId + " успешно удалена.");
+       }
     }
 }

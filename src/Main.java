@@ -87,19 +87,19 @@ public class Main {
                 int menu = scanner.nextInt();
                 switch (menu) {
                     case 1:
-                        repeatability = PeriodTask.ONETIME;
+                        repeatability = new OneTime();
                         break label;
                     case 2:
-                        repeatability = PeriodTask.DAILY;
+                        repeatability = new Daily();
                         break label;
                     case 3:
-                        repeatability = PeriodTask.WEEKLY;
+                        repeatability = new Weekly();
                         break label;
                     case 4:
-                        repeatability = PeriodTask.MONTHLY;
+                        repeatability = new Monthly();
                         break label;
                     case 5:
-                        repeatability = PeriodTask.ANNUAL;
+                        repeatability = new Annual();
                         break label;
                     case 0:
                         break label;
@@ -131,7 +131,7 @@ public class Main {
             }
         }
         Task task = new Task(personalOrWork, taskName, descriptionOfTask, timeCreateTask, repeatability);
-        Task.adSetOfTasks(task);
+        ServiceTask.adSetOfTasks(task);
     }
 
     private static void printMenuPeriod() {
