@@ -37,7 +37,11 @@ public class Main {
         System.out.println("Для просмотра задач на день введите дату в формате ДД-MM-ГГГГ");
         String choiceDate = scanner.next();
         taskForDate = checkDateTime(choiceDate);
-        System.out.println(ServiceTask.getTasksOnDate(taskForDate));
+        if (taskForDate != null) {
+            System.out.println(ServiceTask.getTasksOnDate(taskForDate));
+        } else {
+            System.out.println("Нет задач на дату " + choiceDate);
+        }
     }
 
     private static void deleteTask(Scanner scanner) throws Exception {
@@ -64,8 +68,14 @@ public class Main {
         System.out.print("Введите название задачи: ");
         String fake = scanner.nextLine();
         String taskName = scanner.nextLine();
+        if (taskName.isBlank()) {
+            throw new IllegalArgumentException("Название задачи не может быть пустым!");
+        }
         System.out.print("Введите описание задачи: ");
         String descriptionOfTask = scanner.nextLine();
+        if (descriptionOfTask.isBlank()) {
+            throw new IllegalArgumentException("Описание задачи не может быть пустым!");
+        }
         System.out.println("Введите дату в формате ДД-MM-ГГГГ");
         String dateTime1 = scanner.next();
         LocalDate timeCreateTask = checkDateTime(dateTime1);
